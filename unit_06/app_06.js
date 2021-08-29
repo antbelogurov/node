@@ -1,12 +1,16 @@
 // Task 1
 // Напишите функцию t1, которая  выводит содержимое файла t1.txt в папке home6. Помимо вывода функци должна возвращать данное значение.
-
+const fs = require('fs')
+const path = require('path')
 
 function t1() {
-
+	fs.readFile("home6/t1.txt", 'utf-8', (err, data) => {
+		// console.log('task1 = ', data)
+		return data
+	})
 }
 
-console.log(t1());
+// console.log(t1());
 
 
 // Task 2.
@@ -15,34 +19,35 @@ console.log(t1());
 
 
 function t2(filePath) {
-
-    //return
+	let text = fs.readFileSync(filePath, 'utf-8')
+	return text
 }
 
-let filePath = 'examplepatthfile';
-console.log(t2(filePath));
+let filePath = 'home6/example.txt';
+// console.log('task2 = ', t2(filePath));
 
 
 // Task 3.
 // Напишите функцию t3, которая  выводит список файлов указанной в параметре папки ( в виде массива ) и возвращает данный массив.
 
 function t3(folderName) {
-
+	fs.readdir(folderName, (err, data) => {
+		return data
+	})
 }
 
 
-console.log(t3('example_folder'));
+// console.log('task3 = ', t3('home6'));
 
 // Task 4
 // Напишите функцию t4 которая принимает имя файла и возвращает его размер в килобайтах (только число)
 
 
 function t4(filepath) {
-
+	return fs.statSync('home6/' + filepath).size / 1023
 }
 
-console.log(t4('example_file_path'));
-
+// console.log('task4 = ', t4('t1.txt'));
 
 
 // Task 5
@@ -55,56 +60,92 @@ console.log(t4('example_file_path'));
 // 13000000 -> 13MB
 
 function t5(a) {
-
+	if (a < 999 && a >= 0) {
+		return a + 'B'
+	}
+	if (a < 999999 && a >= 1000) {
+		return a + 'kB'
+	}
+	if (a >= 1000000) {
+		return a + 'MB'
+	}
 }
 
-console.log(t5(34958));
+// console.log('task5', t5(34958));
 
 
 // Task 6
 // Напишите функцию t6 которая выводит содержимое папки. В одной строке выводится имя файла, пробел его размер ( используем t5) перенос строки.
 
 function t6(exFolder) {
-    //return `rgb(${t5(0,255)}....допишите сами
+	//return `rgb(${t5(0,255)}....допишите сами
+	fs.readdir(exFolder, (err, data) => {
+		data.forEach(el => {
+			// console.log(el + ' ' + fs.statSync(exFolder + el).size)
+		})
+	})
 }
 
-t6('example');
+console.log('task6', t6('home6/'));
 
 
 // Task 7
-// Напишите функцию t7, которая принимает путь к файлу и выводит и возвращает его расширение. 
+// Напишите функцию t7, которая принимает путь к файлу и выводит и возвращает его расширение.
 
 function t7(exPath) {
-
+	return path.extname(exPath)
 }
 
-console.log(t7('example_path'));
+//
+// console.log('task 7', t7('home6/t1.txt'));
 
 // Task 8
 // Напишите функцию t8 принимает имя папки и выводит и возвращает суммарный размер файлов в ней.
 
 function t8(exPath) {
 
+	fs.readdir(exPath, (err, data) => {
+		let sum = 0
+		data.forEach(el => {
+			let size = fs.statSync(exPath + el).size
+			sum += size
+		})
+		// console.log('t8',sum)
+		return sum
+	})
 }
 
-console.log(t8('example_path'));
+// console.log('task8',t8('home6/'));
 
 
 // Task 9
 // Создайте функцию t9, которая принимает два параметра - имя папки и файла и проверяет есть ли данный файл в папке. Функция должна возвращать true или false.
 
 function t9(folder, file) {
-
+	fs.readdir(folder, (err, data) => {
+		// console.log(data.includes(file))
+		return data.includes(file)
+	})
 }
 
-console.log('folder', 'file');
+// console.log('task9',t9('home6/', 't1.txt'));
 
 
 // Task 10
 // Создайте функцию t10, которая принимает имя файла и которая возвращает false если файла нет в текущей папке или его размер равен нулю и размер файла если он существует и его размер больше нуля.
 
 function t10(a) {
+	fs.readdir('home6/', (err, data) => {
+		if (data.includes(a)) {
+			console.log(fs.statSync('home6/'+a).size)
+	return fs.statSync('home6/'+a).size
+		} else {
+			console.log(false)
+			return false
+		}
+	})
+
 
 }
 
-console.log(t10('filename'));
+console.log(t10('t2.txt'));

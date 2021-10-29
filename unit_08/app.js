@@ -11,9 +11,7 @@ const t2 = (req, res) => {
                  console.log('сработало');
                         res.end('800')
                 }
-            
         }
-
 }
 
 

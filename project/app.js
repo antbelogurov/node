@@ -53,3 +53,20 @@ app.get('/cat', (req, res) => {
         })
     })
 })
+
+app.get('/goods', (req, res) => {
+    let goodsId = req.query.id
+    con.query('SELECT * FROM goods WHERE id =' + goodsId, (err, result) => {
+        if (err) reject(err);
+        res.render('goods', {
+            goods: JSON.parse(JSON.stringify(result))
+        })
+    })
+})
+app.post('/get-category-list', (req, res) => {
+    con.query('SELECT id,category FROM category', (err, result) => {
+        if (err) reject(err);
+        console.log(result)
+        res.json(result)
+    })
+})

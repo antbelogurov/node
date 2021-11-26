@@ -2,5 +2,5 @@ include header
 
 h2 App
 each val,index in goods 
-    p #{val['name']}
+    p=val['name']
     img(src='img/' + val['image'], alt=val['name'])

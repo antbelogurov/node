@@ -2,5 +2,8 @@ include header
 
 header(class='cat_header')
     include cat_header
-div(class='container')
+div.container
     h2 #{cat[0]['category']}
+    div.row
+        each val,idx in goods   
+            include card 

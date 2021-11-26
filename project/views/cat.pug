@@ -1,9 +1,13 @@
 include header
+include nav
 
 header(class='cat_header')
     include cat_header
-div.container
-    h2 #{cat[0]['category']}
-    div.row
-        each val,idx in goods   
-            include card 
+.wrapper
+    .container
+        h2 #{cat[0]['category']}
+            div.row
+                each val,idx in goods   
+                    include card 
+
+include footer

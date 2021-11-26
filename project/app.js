@@ -11,6 +11,7 @@ let con = mysql.createConnection({
     database: 'noda'
 })
 
+app.use(express.json())
 app.use(express.static('assets'))
 app.set('view engine', 'pug')
 app.listen(3000, () => {
@@ -66,7 +67,17 @@ app.get('/goods', (req, res) => {
 app.post('/get-category-list', (req, res) => {
     con.query('SELECT id,category FROM category', (err, result) => {
         if (err) reject(err);
-        console.log(result)
         res.json(result)
+    })
+})
+app.post('/get-goods-info', (req, res) => {
+    console.log(req.body.key);
+    con.query(`SELECT * FROM goods WHERE id in (${req.body.key.join(',')})`, (err, result) => {
+        if (err) reject(err);
+        let goods = {}
+        for (let i = 0; i < result.length; i++) {
+            goods[result[i]['id']] = result[i]
+        }
+        res.json(goods)
     })
 })

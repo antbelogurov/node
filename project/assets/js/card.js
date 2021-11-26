@@ -40,10 +40,14 @@ function showCart(data) {
                         <a href=/goods?id=${data[key].id}>
                             ${data[key].name}
                         </a></td>
-                    </tr>`
+                    <td class='px-0'> <i class = 'far fa-minus-square cart-minus'
+                    data-goods_id = ${data[key].id} ></i></td>
+                    <td class='px-0'> ${key}</td>
+                     <td><i class='far fa-plus-square cart-plus'data-goods_id=${data[key].id}></i></td>
+                    </tr>
+                    `
         out += row
-        console.log(row);
-        console.log(out);
+
     }
     out += '</tbody></table>'
     document.querySelector('.cart-window').innerHTML = out

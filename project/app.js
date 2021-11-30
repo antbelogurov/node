@@ -18,17 +18,33 @@ app.listen(3000, () => {
     console.log('node work');
 })
 
-app.get('/', (req, res) => {
-    con.query('SELECT * FROM goods', (err, result) => {
-        let goods = {}
-        for (let i = 0; i < result.length; i++) {
-            goods[result[i]['id']] = result[i]
-        }
+app.get('/', function (req, res) {
+    let cat = new Promise((resolve, reject) => {
+        con.query(
+            "select id,name, cost, image, category from (select id,name,cost,image,category, if(if(@curr_category != category, @curr_category := category, '') != '', @k := 0, @k := @k + 1) as ind   from goods, ( select @curr_category := '' ) v ) goods where ind < 3",
+            function (err, result) {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+    let description = new Promise((resolve, reject) => {
+        con.query(
+            "select * from category",
+            function (err, result) {
+                if (err) return reject(err);
+                resolve(result);
+            }
+        );
+    });
+    Promise.all([cat, description]).then(val => {
+        console.log(val[1])
         res.render('main', {
-            goods: JSON.parse(JSON.stringify(goods))
+            goods: val[0],
+            cat: val[1]
         })
     })
-})
+});
 
 app.get('/cat', (req, res) => {
     let catId = req.query.id
@@ -64,6 +80,9 @@ app.get('/goods', (req, res) => {
         })
     })
 })
+app.get('/order', (req, res) => {
+    res.render('order')
+})
 app.post('/get-category-list', (req, res) => {
     con.query('SELECT id,category FROM category', (err, result) => {
         if (err) reject(err);
@@ -72,12 +91,16 @@ app.post('/get-category-list', (req, res) => {
 })
 app.post('/get-goods-info', (req, res) => {
     console.log(req.body.key);
-    con.query(`SELECT * FROM goods WHERE id in (${req.body.key.join(',')})`, (err, result) => {
-        if (err) reject(err);
-        let goods = {}
-        for (let i = 0; i < result.length; i++) {
-            goods[result[i]['id']] = result[i]
-        }
-        res.json(goods)
-    })
+    if (req.body.key.length != 0) {
+        con.query(`SELECT * FROM goods WHERE id in (${req.body.key.join(',')})`, (err, result) => {
+            if (err) reject(err);
+            let goods = {}
+            for (let i = 0; i < result.length; i++) {
+                goods[result[i]['id']] = result[i]
+            }
+            res.json(goods)
+        })
+    } else {
+        res.send('0')
+    }
 })

@@ -53,14 +53,21 @@ footer {
 .wrapper  {
     padding-bottom: 100px;
 }
-.cart-window {
+.cart-window.cart-nav {
     position: absolute;
-    min-width: 300px;
-    min-height: 200px;
     background-color: white;
     border-radius: 5px;
     border: 1px solid black;
     top: 50px;
     right: 0;
     z-index: 2;
+    min-width: 400px;
+    min-height: 200px;
+}
+.cart-minus,
+.cart-plus {
+    cursor: pointer;
+}
+.close-cart-window {
+display: none;
 }

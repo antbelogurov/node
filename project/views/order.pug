@@ -1,0 +1,26 @@
+include header
+
+header(class='order_header')
+    include order_header
+.wrapper
+    .container
+        h4.mt-4 Корзина
+        .cart-window.mb-4
+        .row
+            .col-md-4
+                form#form
+                    .mb-3
+                        label(for="name").form-label Имя
+                        input(type="name").form-control#name
+                    .mb-3
+                        label(for="exampleInputEmail1").form-label Email
+                        input(type="email" aria-describedby="emailHelp").form-control#email
+                    .mb-3
+                        label(for="phone").form-label Телефон
+                        input(type="phone").form-control#phone
+
+                    .mb-3.form-check
+                        input(type="checkbox").form-check-input#check
+                        label(for="exampleCheck1").form-check-label Согласен у условиями
+                    button(type="submit").btn.btn-primary Подтверждаю
+include footer

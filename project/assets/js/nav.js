@@ -1,6 +1,8 @@
-let nav = document.querySelector('.left-nav')
+let nav = document.querySelector('.left-nav'),
+    cart = document.querySelector('#open-cart')
 document.querySelector('#close-btn').onclick = () => nav.classList.add("close-nav");
 document.querySelector('#open-menu').onclick = () => nav.classList.remove("close-nav");
+cart.onclick = () => document.querySelector('.cart-window').classList.toggle("close-cart-window");
 
 function getList() {
     fetch('/get-category-list', {

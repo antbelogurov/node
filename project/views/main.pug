@@ -1,8 +1,20 @@
 include header
 include nav
 
-h2 App
-each val,index in goods 
-    p=val['name']
-    img(src='img/' + val['image'], alt=val['name'])
+header(class='cat_header')
+    include cat_header
+.wrapper
+    .container
+
+            div.row
+                each val1,idx in cat 
+                    .col-12
+                        h2
+                            a(href=`/cat?id=${val1['id']}`) #{val1['category']}
+                    each val,i in goods
+                        if val['category'] === val1['id']
+                            include card
+
+include footer
+
          

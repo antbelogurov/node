@@ -6,8 +6,13 @@ form.onsubmit = (e) => {
         check = document.querySelector('#check').checked,
         form = document.querySelector('#form')
 
-    if (!phone || !name || !check) {
+    if (!phone || !name || !email) {
         console.log('не заполнили поля');
+        Swal.fire({
+            icon: 'error',
+            title: 'Ой, ошибка!',
+            text: 'Не заполнены все поля',
+        })
     }
     if (check) {
         console.log('не согласились');
@@ -24,6 +29,15 @@ form.onsubmit = (e) => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        console.log(response.text());
+        return response.text()
+    }).then(function (body) {
+        if (body == 'ok') {
+
+        } else {
+
         }
     })
 }

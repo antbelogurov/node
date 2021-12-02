@@ -90,7 +90,6 @@ app.post('/get-category-list', (req, res) => {
     })
 })
 app.post('/get-goods-info', (req, res) => {
-    console.log(req.body.key);
     if (req.body.key.length != 0) {
         con.query(`SELECT * FROM goods WHERE id in (${req.body.key.join(',')})`, (err, result) => {
             if (err) reject(err);
@@ -104,3 +103,25 @@ app.post('/get-goods-info', (req, res) => {
         res.send('0')
     }
 })
+
+
+app.post('/finish-order', (req, res) => {
+    console.log(req.body);
+    if (req.body.key.length != 0) {
+        let key = Object.keys(req.body.key);
+        con.query(
+            'SELECT id,name,cost FROM goods WHERE id IN (' + key.join(',') + ')',
+            (error, result) => {
+                if (error) reject(error);
+                console.log(result);
+                sendMail(req.body, result).catch(console.error);
+                res.send('ok');
+            })
+    } else {
+        res.send('no')
+    }
+})
+
+function sendMail(data, result) {
+
+}

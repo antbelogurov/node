@@ -1,6 +1,7 @@
 // express 
 let express = require('express'),
-    app = express()
+    app = express(),
+    nodemailer = require('nodemailer')
 
 
 let mysql = require('mysql')
@@ -106,15 +107,13 @@ app.post('/get-goods-info', (req, res) => {
 
 
 app.post('/finish-order', (req, res) => {
-    console.log(req.body);
     if (req.body.key.length != 0) {
         let key = Object.keys(req.body.key);
         con.query(
             'SELECT id,name,cost FROM goods WHERE id IN (' + key.join(',') + ')',
             (error, result) => {
                 if (error) reject(error);
-                console.log(result);
-                sendMail(req.body, result).catch(console.error);
+                sendingMail(req.body, result).catch(console.error);
                 res.send('ok');
             })
     } else {
@@ -122,6 +121,54 @@ app.post('/finish-order', (req, res) => {
     }
 })
 
-function sendMail(data, result) {
+async function sendingMail(data, result) {
+    console.log(data)
+    console.log(result)
 
+    let res = `<h2>Order</h2>
+    `
+    for (let i = 0; i < result.length; i++) {
+        console.log(result[i])
+        let name = result[i].name,
+            id = result[i].id,
+            cost = result[i].cost;
+        res += `<p>${name} : ${data.key[id]} : ${cost * data.key[id]}</p>`
+    }
+    let email = data.email,
+        name = data.name,
+        phone = data.phone
+
+    res += '<hr/>'
+    res += `<p>Name : ${name}</p>`
+    res += '<hr/>'
+    res += `<p>email : ${email}</p>`
+    res += '<hr/>'
+    res += `<p>phone : ${phone}</p>`
+
+    let testAccount = await nodemailer.createTestAccount();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: testAccount.user, // generated ethereal user
+            pass: testAccount.pass, // generated ethereal password
+        },
+    });
+
+    console.log(res)
+    let mailSetting = await transporter.sendMail({
+        from: '<l@gmail.com>',
+        to: "l@gmail.com," + data.email,
+        subject: "Lite shop order",
+        text: 'Hello world',
+        html: res
+    });
+
+    let info = await transporter.sendMail(mailSetting);
+    console.log("MessageSent: %s", info.messageId);
+    console.log("PreviewSent: %s", nodemailer.getTestMessageUrl(info));
+    return true;
 }

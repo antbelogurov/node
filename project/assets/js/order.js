@@ -31,7 +31,6 @@ form.onsubmit = (e) => {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        console.log(response.text());
         return response.text()
     }).then(function (body) {
         if (body == 'ok') {

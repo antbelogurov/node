@@ -9,6 +9,7 @@
   "author": "antbelogurov@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "nodemailer": "^6.7.2",
     "sweetalert2": "^11.2.1"
   }
 }
